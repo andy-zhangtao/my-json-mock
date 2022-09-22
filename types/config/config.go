@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/pelletier/go-toml/v2"
+	"github.com/sirupsen/logrus"
 )
 
 type RunParams struct {
@@ -27,6 +28,9 @@ func ParseParams(data []byte) (rp RunParams, err error) {
 		return rp, err
 	}
 
+	if rp.Configure.Debug {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 	return rp, nil
 }
 

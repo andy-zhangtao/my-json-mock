@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/andy-zhangtao/my-json-mock/models"
+	"github.com/andy-zhangtao/my-json-mock/types/db"
 	"github.com/andy-zhangtao/my-json-mock/utils"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -49,7 +51,14 @@ func AddNewMockDecodeRequest(c context.Context, r *http.Request) (interface{}, e
 	if err != nil {
 		return nil, err
 	}
-	return mr, nil
+
+	logrus.Debugf("mock request: %+v", mr)
+	return db.MockRequest{
+		Name:   mr.Name,
+		Mock:   mr.Mock,
+		Enable: mr.Enable,
+		Remark: mr.Remark,
+	}, nil
 }
 
 // AddNewMockEncodeResponse
