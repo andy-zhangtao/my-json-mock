@@ -1,5 +1,6 @@
 [configure]
 debug = true
 port = 18000
+mockPort = 18001
 [mysql]
 dsn = "root:123456@tcp(127.0.0.1:3306)/fly"

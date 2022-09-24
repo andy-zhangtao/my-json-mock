@@ -2,12 +2,16 @@ package endpoints
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/andy-zhangtao/my-json-mock/models"
 	"github.com/andy-zhangtao/my-json-mock/services"
 	"github.com/andy-zhangtao/my-json-mock/types"
 	"github.com/andy-zhangtao/my-json-mock/types/db"
+	"github.com/andy-zhangtao/my-json-mock/utils"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/pkg/errors"
+	"net/http"
+	"strings"
 )
 
 func MakeFindAllMockEndpoint(ts services.IMockService) endpoint.Endpoint {
@@ -51,6 +55,14 @@ func MakeAddNewMockEndpoint(ts services.IMockService) endpoint.Endpoint {
 		if !ok {
 			return nil, errors.New(types.ConvertRequestError)
 		}
+
+		err = addNewMockPreCheck(&r)
+		if err != nil {
+			return nil, err
+		}
+
+		data, _ := json.Marshal(r)
+		r.Mid = utils.GenerateID(string(data))
 
 		err = ts.AddNewMock(r)
 		if err != nil {
@@ -102,4 +114,35 @@ func MakeDeleteMockEndpoint(ts services.IMockService) endpoint.Endpoint {
 			Result: types.HttpCommonSucces,
 		}, nil
 	}
+}
+
+func addNewMockPreCheck(req *db.MockRequest) error {
+	req.User = strings.TrimSpace(req.User)
+	req.Method = strings.ToUpper(strings.TrimSpace(req.Method))
+	req.Name = strings.TrimSpace(req.Name)
+	req.Mock = strings.TrimSpace(req.Mock)
+	req.Path = strings.TrimSpace(req.Path)
+	req.Params = strings.TrimSpace(req.Params)
+	req.Remark = strings.TrimSpace(req.Remark)
+
+	if req.User == "" {
+		return types.EmptyUserError{}
+	}
+
+	if req.Method == "" {
+		req.Method = http.MethodGet
+	}
+
+	if req.Name == "" {
+		return types.EmptyNameError{}
+	}
+
+	if req.Mock == "" {
+		return types.EmptyMockContentError{}
+	}
+
+	if req.Path == "" {
+		return types.EmptyPathError{}
+	}
+	return nil
 }

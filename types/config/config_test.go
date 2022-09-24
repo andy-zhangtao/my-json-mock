@@ -21,6 +21,7 @@ func TestParseParams(t *testing.T) {
 [configure]
 	debug = true
 	port = 18000
+	mockPort = 18001
 [mysql]
 	addr = "127.0.0.1:3600"
 	user = "admin"
@@ -29,8 +30,9 @@ func TestParseParams(t *testing.T) {
 `)},
 			wantRp: RunParams{
 				Configure: Configure{
-					Debug: true,
-					Port:  18000,
+					Debug:    true,
+					Port:     18000,
+					MockPort: 18001,
 				},
 				Mysql: Mysql{
 					Dsn:    "127.0.0.1:3600",

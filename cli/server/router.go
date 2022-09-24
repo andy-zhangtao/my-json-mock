@@ -8,12 +8,13 @@ import (
 	"github.com/go-kit/kit/transport/http"
 )
 
-func setRoute(router *gin.Engine) *gin.Engine {
-	router = mockRoute(router)
-	return router
+func setRoute(router *gin.Engine) {
+	runRoute(router)
+
+	return
 }
 
-func mockRoute(router *gin.Engine) *gin.Engine {
+func runRoute(router *gin.Engine) {
 	findAllMock := endpoints.MakeFindAllMockEndpoint(IMockServices())
 	findSpecifyMockWithId := endpoints.MakeFindSpecifyMockWithIdEndpoint(IMockServices())
 	addNewMock := endpoints.MakeAddNewMockEndpoint(IMockServices())
@@ -31,5 +32,5 @@ func mockRoute(router *gin.Engine) *gin.Engine {
 	router.POST(types.AddNewMock, gin.WrapH(addNewMockHandler))
 	router.POST(types.UpdateMock, gin.WrapH(updateMockHandler))
 	router.DELETE(types.DeleMock, gin.WrapH(deleteMockHandler))
-	return router
+	return
 }

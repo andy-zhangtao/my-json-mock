@@ -8,7 +8,10 @@ import (
 func main() {
 	_init()
 
-	router := setRoute(gin.Default())
+	go mock(rp)
+
+	router := gin.Default()
+	setRoute(router)
 
 	router.Run(fmt.Sprintf(":%d", rp.Configure.Port))
 }

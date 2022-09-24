@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/andy-zhangtao/my-json-mock/models"
+	"github.com/andy-zhangtao/my-json-mock/types"
 	"github.com/andy-zhangtao/my-json-mock/types/db"
 	"github.com/andy-zhangtao/my-json-mock/utils"
 	"github.com/sirupsen/logrus"
@@ -25,6 +26,7 @@ func FindAllMockDecodeRequest(c context.Context, r *http.Request) (interface{}, 
 // FindAllMockEncodeResponse
 func FindAllMockEncodeResponse(c context.Context, w http.ResponseWriter, res interface{}) error {
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set(types.ContentType, types.Json)
 	return json.NewEncoder(w).Encode(res)
 }
 
@@ -41,6 +43,7 @@ func FindSpecifyMockWithIdDecodeRequest(c context.Context, r *http.Request) (int
 // FindSpecifyMockWithIdEncodeResponse
 func FindSpecifyMockWithIdEncodeResponse(c context.Context, w http.ResponseWriter, res interface{}) error {
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set(types.ContentType, types.Json)
 	return json.NewEncoder(w).Encode(res)
 }
 
@@ -53,9 +56,23 @@ func AddNewMockDecodeRequest(c context.Context, r *http.Request) (interface{}, e
 	}
 
 	logrus.Debugf("mock request: %+v", mr)
+
+	if mr.Params.ContentType == "" {
+		mr.Params.ContentType = types.Json
+	}
+
+	params, err := json.Marshal(mr.Params)
+	if err != nil {
+		return nil, err
+	}
+
 	return db.MockRequest{
+		User:   mr.User,
 		Name:   mr.Name,
+		Method: mr.Method,
 		Mock:   mr.Mock,
+		Path:   mr.Path,
+		Params: string(params),
 		Enable: mr.Enable,
 		Remark: mr.Remark,
 	}, nil
@@ -64,6 +81,7 @@ func AddNewMockDecodeRequest(c context.Context, r *http.Request) (interface{}, e
 // AddNewMockEncodeResponse
 func AddNewMockEncodeResponse(c context.Context, w http.ResponseWriter, res interface{}) error {
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set(types.ContentType, types.Json)
 	return json.NewEncoder(w).Encode(res)
 }
 

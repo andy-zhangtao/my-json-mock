@@ -11,8 +11,9 @@ type RunParams struct {
 	Mysql     Mysql     `toml:"mysql"`
 }
 type Configure struct {
-	Debug bool `toml:"debug"`
-	Port  int  `toml:"port"`
+	Debug    bool `toml:"debug"`
+	Port     int  `toml:"port"`
+	MockPort int  `toml:"mockPort"`
 }
 type Mysql struct {
 	Dsn    string `toml:"dsn"`
