@@ -71,7 +71,7 @@ func MakeAddNewMockEndpoint(ts services.IMockService) endpoint.Endpoint {
 
 		return models.CommonResponse{
 			Code:   types.OK,
-			Result: types.HttpCommonSucces,
+			Result: r.Mid,
 		}, nil
 	}
 }

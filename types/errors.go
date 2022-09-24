@@ -27,3 +27,9 @@ type EmptyPathError struct{}
 func (e EmptyPathError) Error() string {
 	return "path empty"
 }
+
+type NotFoundMockError struct{}
+
+func (e NotFoundMockError) Error() string {
+	return "not found this mock api"
+}

@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/andy-zhangtao/my-json-mock/endpoints"
+	"github.com/andy-zhangtao/my-json-mock/transports"
+	"github.com/andy-zhangtao/my-json-mock/types"
 	"github.com/andy-zhangtao/my-json-mock/types/config"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/go-kit/kit/transport/http"
 )
 
 // mock.go 是给用户使用的服务
@@ -21,11 +24,17 @@ func mock(rp config.RunParams) {
 
 // mockRouter 拦截所有的请求
 func mockRouter(router *gin.Engine) {
-	router.GET("/*url", func(context *gin.Context) {
-		logrus.Debugf("%s", context.FullPath())
-		logrus.Debugf("%s", context.Param("url"))
-		logrus.Debugf("%s", context.Param("id"))
-		context.JSON(200, "{\"code\":300}")
-	})
+	runMock := endpoints.MakeRunMockEndpoint(IMockServices())
+
+	runMockHandler := http.NewServer(runMock, transports.RunMockDecodeRequest, transports.RunMockEncodeResponse)
+
+	router.GET(types.RunMock, gin.WrapH(runMockHandler))
+
+	//func(context *gin.Context) {
+	//	logrus.Debugf("%s", context.FullPath())
+	//	logrus.Debugf("%s", context.Param("url"))
+	//	logrus.Debugf("%s", context.Param("id"))
+	//	context.JSON(200, "{\"code\":300}")
+	//}
 	return
 }

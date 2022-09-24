@@ -11,3 +11,5 @@ CREATE TABLE `t_mock` (
                           `remark` varchar(1024) NOT NULL,
                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE UNIQUE INDEX t_mock_mid_IDX USING BTREE ON t_mock (mid);

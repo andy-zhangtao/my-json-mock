@@ -55,3 +55,12 @@ func (ts MockService) DeleteMock(id int) error {
 
 	return ts.db.DeleteMock(t)
 }
+
+func (ts MockService) FindSpecifyMockWithMId(mid string) (db.MockRequest, error) {
+	t, err := ts.db.FindSpecifyMockWithMId(mid)
+	if err != nil {
+		return t, err
+	}
+
+	return t, nil
+}

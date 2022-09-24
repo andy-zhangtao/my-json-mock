@@ -27,3 +27,9 @@ func (mc *MysqlClient) FindAllMock() ([]db.MockRequest, error) {
 func (mc *MysqlClient) DeleteMock(t db.MockRequest) error {
 	return mc.gdb.Delete(&t).Error
 }
+
+func (mc *MysqlClient) FindSpecifyMockWithMId(mid string) (db.MockRequest, error) {
+	result := db.MockRequest{}
+	err := mc.gdb.Find(&db.MockRequest{Mid: mid}).First(&result).Error
+	return result, err
+}

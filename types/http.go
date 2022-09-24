@@ -6,4 +6,9 @@ const (
 	AddNewMock  = "/add/mock"
 	UpdateMock  = "/update/mock"
 	DeleMock    = "/delete/mock"
+	RunMock     = "/*url"
+)
+
+const (
+	MockID = "x-my-mock"
 )
